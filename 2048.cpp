@@ -5,16 +5,31 @@
 #include <windows.h>
 using namespace std;
 
-#define N 4
+const int N = 4;
 int grid[N][N] = {0}, D = 0, M = 2048, a_sum = 0;
 bool restart = false;
 int maxsum = 0;
+
+void CursorControl(bool show)
+{
+	HANDLE handle = GetStdHandle(STD_OUTPUT_HANDLE);
+	CONSOLE_CURSOR_INFO CursorInfo;
+	GetConsoleCursorInfo(handle, &CursorInfo);//获取控制台光标信息
+	CursorInfo.bVisible = show; //隐藏控制台光标
+	SetConsoleCursorInfo(handle, &CursorInfo);//设置控制台光标状态
+}
+
+void gotoxy(short x, short y)
+{
+ 	COORD coord = {x, y};
+	SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE), coord);
+}
 
 //显示
 void showdata(){
 	maxsum = max(maxsum, a_sum);
 	int i, j;
-	system("CLS");
+	gotoxy(0, 0);
 	for(i = 0;i < N + 2;i ++){
 		printf("%5c", '+');
 	}
@@ -247,6 +262,7 @@ int canAdd()
 }
 
 int main(){
+	CursorControl(false);
 	char c;
 	int mov, key, isf;
 	//初次状态
